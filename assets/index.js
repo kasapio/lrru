@@ -57,7 +57,6 @@ imageInput.addEventListener('change', (event) => {
 
         var url = e.target.result;
 
-        // zapis obrazka
         upload.classList.remove("error_shown")
         upload.setAttribute("selected", url);
         upload.classList.add("upload_loaded");
@@ -80,8 +79,7 @@ document.querySelector(".go").addEventListener('click', () => {
         empty.push(upload);
         upload.classList.add("error_shown")
     }else{
-        params.set("image", upload.getAttribute("selected"))
-        localStorage.setItem("photo", upload.getAttribute("selected")); // <-- zapis zdjęcia
+        localStorage.setItem("photo", upload.getAttribute("selected"));
     }
 
     var birthday = "";
@@ -120,8 +118,7 @@ document.querySelector(".go").addEventListener('click', () => {
     if (empty.length != 0){
         empty[0].scrollIntoView();
     }else{
-
-        forwardToId(params);
+        forwardToId();
     }
 
 });
@@ -133,9 +130,9 @@ function isEmpty(value){
 
 }
 
-function forwardToId(params){
+function forwardToId(){
 
-    location.href = "id.html?" + params
+    location.href = "id.html"
 
 }
 
