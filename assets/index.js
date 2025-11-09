@@ -1,4 +1,3 @@
-
 var selector = document.querySelector(".selector_box");
 selector.addEventListener('click', () => {
     if (selector.classList.contains("selector_open")){
@@ -27,7 +26,7 @@ var upload = document.querySelector(".upload");
 
 var imageInput = document.createElement("input");
 imageInput.type = "file";
-imageInput.accept = ".jpeg,.png,.gif";
+imageInput.accept = ".jpeg,.png,.gif,.jpg";
 
 document.querySelectorAll(".input_holder").forEach((element) => {
 
@@ -51,27 +50,22 @@ imageInput.addEventListener('change', (event) => {
     upload.removeAttribute("selected")
 
     var file = imageInput.files[0];
-    var data = new FormData();
-    data.append("image", file);
+    if (!file) return;
 
-    fetch('	https://api.imgur.com/3/image' ,{
-        method: 'POST',
-        headers: {
-            'Authorization': 'Client-ID c8c28d402435402'
-        },
-        body: data
-    })
-    .then(result => result.json())
-    .then(response => {
-        
-        var url = response.data.link;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+
+        var url = e.target.result;
+
+        // zapis obrazka
         upload.classList.remove("error_shown")
         upload.setAttribute("selected", url);
         upload.classList.add("upload_loaded");
         upload.classList.remove("upload_loading");
         upload.querySelector(".upload_uploaded").src = url;
 
-    })
+    }
+    reader.readAsDataURL(file);
 
 })
 
@@ -87,6 +81,7 @@ document.querySelector(".go").addEventListener('click', () => {
         upload.classList.add("error_shown")
     }else{
         params.set("image", upload.getAttribute("selected"))
+        localStorage.setItem("photo", upload.getAttribute("selected")); // <-- zapis zdjęcia
     }
 
     var birthday = "";
@@ -117,6 +112,7 @@ document.querySelector(".go").addEventListener('click', () => {
             element.classList.add("error_shown");
         }else{
             params.set(input.id, input.value)
+            localStorage.setItem(input.id, input.value);
         }
 
     })
@@ -160,5 +156,3 @@ document.querySelectorAll(".input").forEach((input) => {
         localStorage.setItem(input.id, input.value);
     });
 });
-
-
